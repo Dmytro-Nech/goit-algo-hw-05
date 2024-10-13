@@ -1,6 +1,8 @@
 def caching_fibonacci():
+    # створюємо словник для кеша
     cache = {}
     def fibonacci(n):
+        # перевіряємо всі умови
         if n <= 0:
             return 0
         elif n == 1:
@@ -10,6 +12,7 @@ def caching_fibonacci():
         else:
             cache[n] = fibonacci(n - 1) + fibonacci (n -2)
             return cache[n]
+    # повертаємо внутрішню функцію
     return fibonacci
 
 def main():
