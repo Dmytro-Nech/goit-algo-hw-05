@@ -82,7 +82,6 @@ def phone_username(args, contacts):
     return f"{username}'s phone is: {contacts[username]}"
     
   
-
 @ input_error_all
 def print_all(contacts):
     return contacts
