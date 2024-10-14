@@ -18,7 +18,7 @@ def main():
 1000.01 як основний дохід, доповнений додатковими 
 надходженнями 27.45 і 324.00 доларів."""
     total = sum_profit(text, generator_numbers)
-    print(total)
+    print(f"Загальний дохід: {total}")
 
 if __name__ == "__main__":
     main()
