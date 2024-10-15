@@ -1,59 +1,16 @@
-# Створив декоратор для кожної функції, як сказано у завданні, 
-# хоча простіше і логічніше було би створити один універсальний декоратор по типу ось такого:
+# Декоратор для всіх функцій
 
-# def input_error(func):
-#     def inner(*args, **kwargs):
-#         try:
-#             return func(*args, **kwargs)
-#         except ValueError:
-#             return "Enter the argument for the command"
-#         except IndexError:
-#             return "Not enough arguments provided. Please check the command format."
-#         except KeyError:
-#             return "This contact does not exist."
-#     return inner
-
-
-# декоратор для додавання контактів
-def input_error_add(func):
+def input_error(func):
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except ValueError:
             return "Enter the argument for the command"
-    return inner
-
-# декоратор пошуку телефонів
-def input_error_phone(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
         except IndexError:
-            return "Invalid data. Usage: phone <name>"
+            return "Not enough arguments provided. Please check the command format."
         except KeyError:
-            return "Contact not found"
+            return "This contact does not exist or phonebook is empty."
     return inner
-
-# декортатор для зміни телефона
-def input_error_change(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "Invalid data. Usage: change <name> <phone>"
-        except KeyError:
-            return "This contact does not exist."
-    return inner
-
-# декоратор для виведення всіх контактів
-def input_error_all(func):
-    def inner(dict):
-        if dict:
-            return func(dict)
-        else:
-            return "Phonebook is empty"
-    return inner
-
 
 # Парсинг командної строки
 def parse_input(user_input):
@@ -61,13 +18,13 @@ def parse_input(user_input):
     cmd = cmd.strip().lower()
     return cmd, *args
 
-@ input_error_add
+@input_error
 def add_contact(args, contacts):
     name, phone = args # Очікуємо два аргументи: ім'я та телефон
     contacts[name] = phone
     return "Contact added."
 
-@ input_error_change 
+@input_error
 def change_contact(args, contacts):
     name, phone = args  # Очікуємо два аргументи
     if name in contacts:
@@ -76,15 +33,17 @@ def change_contact(args, contacts):
     else:
         raise KeyError
     
-@ input_error_phone 
+@input_error 
 def phone_username(args, contacts):
     username = args[0].strip()  # Отримуємо ім'я контакту
     return f"{username}'s phone is: {contacts[username]}"
-    
   
-@ input_error_all
+@input_error
 def print_all(contacts):
-    return contacts
+    if contacts:
+        return contacts
+    else:
+        raise KeyError
 
 
 def main():
